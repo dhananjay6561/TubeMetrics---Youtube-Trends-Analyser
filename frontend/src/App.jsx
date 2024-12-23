@@ -16,6 +16,10 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Backend URL from environment variable
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000";
+
   useEffect(() => {
     const storedApiKey = localStorage.getItem("youtubeApiKey");
     if (storedApiKey) {
@@ -28,9 +32,8 @@ export default function App() {
     setError("");
 
     try {
-      const response = await axios.get("http://127.0.0.1:5000/api/trending", {
+      const response = await axios.get(`${backendUrl}/api/trending`, {
         params: {
-          apiKey, // Pass API key to the backend
           region,
           maxResults,
           category,
@@ -39,7 +42,10 @@ export default function App() {
       });
       setVideos(response.data);
     } catch (err) {
-      setError("Failed to fetch trending videos. Please try again.");
+      console.error("Error fetching trending videos:", err);
+      setError(
+        "Failed to fetch trending videos. Please check the backend URL or try again."
+      );
     } finally {
       setLoading(false);
     }
