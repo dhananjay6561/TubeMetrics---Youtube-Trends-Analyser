@@ -65,8 +65,9 @@ Follow these steps to set up and run the project:
 ### Setup
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone <https://github.com/dhananjay6561/TubeMetrics---Youtube-Trends-Analyserl>
+   cd <TubeMetrics---Youtube-Trends-Analyser
+>
    ```
 
 2. **Backend Setup**:
