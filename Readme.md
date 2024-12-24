@@ -234,7 +234,7 @@ MIT License - see LICENSE.md
 
 ## **Contact**
 - GitHub Issues: [Project Issues](https://github.com/dhananjay6561/TubeMetrics---Youtube-Trends-Analyser/issues)
-- Email: your.email@example.com
+- Email: dhananjayaggarwal6561@gmail.com
 
 ## **Acknowledgments**
 - YouTube Data API
