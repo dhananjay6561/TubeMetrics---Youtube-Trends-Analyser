@@ -4,7 +4,10 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["*"]}})  # Replace "*" with trusted domains in production
+
+# Enable CORS for all routes and origins
+CORS(app, resources={r"/*": {"origins": ["*", "http://localhost:3000", "http://localhost:5173", "https://tube-metrics-youtube-trends-analyser.vercel.app/"]}})
+
 
 @app.route("/")
 def home():
