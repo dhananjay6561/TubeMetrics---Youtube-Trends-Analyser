@@ -5,13 +5,7 @@ import Settings from "./components/Settings";
 import TrendingVideos from "./components/TrendingVideos";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react";
-
-// Mocking process.env for environment variables
-const process = {
-  env: {
-    REACT_APP_BACKEND_URL: "https://tubemetrics-youtube-trends-analyser.onrender.com", // Replace with your actual backend URL
-  },
-};
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function App() {
   const [region, setRegion] = useState("US");
@@ -22,8 +16,8 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Backend URL from environment variable with fallback
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+ 
+  const backendUrl = "http://tubemetricsbackend.vercel.app/";
 
   const fetchTrendingVideos = async () => {
     setLoading(true);
@@ -42,7 +36,7 @@ export default function App() {
     } catch (err) {
       console.error("Error fetching trending videos:", err);
       setError(
-        "Failed to fetch trending videos. Please check the backend URL or try again."
+        "Failed to fetch trending videos. It's likely that the backend server is down. Please try again later."
       );
     } finally {
       setLoading(false);
