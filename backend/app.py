@@ -1,14 +1,10 @@
 from flask import Flask, request, jsonify
 from model import get_trending_videos, get_category_mapping
 from flask_cors import CORS
-from dotenv import load_dotenv
 import os
 
-# Load environment variables
-load_dotenv()
-
 app = Flask(__name__)
-CORS(app)  # Enable CORS
+CORS(app, resources={r"/*": {"origins": ["*"]}})  # Replace "*" with trusted domains in production
 
 @app.route("/")
 def home():
@@ -61,5 +57,5 @@ def categories():
         return jsonify({"error": "Failed to fetch categories", "details": str(e)}), 500
 
 if __name__ == "__main__":
-    # Run the Flask app
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
