@@ -6,10 +6,9 @@ import TrendingVideos from "./components/TrendingVideos";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react";
 
-// Mocking process.env for environment variables
 const process = {
   env: {
-    REACT_APP_BACKEND_URL: "https://tubemetrics-youtube-trends-analyser.onrender.com", // Replace with your actual backend URL
+    REACT_APP_BACKEND_URL: "https://tubemetrics-youtube-trends-analyser.onrender.com", 
   },
 };
 
@@ -22,10 +21,10 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Backend URL from environment variable with fallback
+ 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-  console.log("Backend URL:", backendUrl); // Debugging line
+  console.log("Backend URL:", backendUrl); 
 
   const fetchTrendingVideos = async () => {
     setLoading(true);
