@@ -6,9 +6,10 @@ import TrendingVideos from "./components/TrendingVideos";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react";
 
+// Mocking process.env for environment variables
 const process = {
   env: {
-    REACT_APP_BACKEND_URL: "https://tubemetrics-youtube-trends-analyser.onrender.com", 
+    REACT_APP_BACKEND_URL: "https://tubemetrics-youtube-trends-analyser.onrender.com", // Replace with your actual backend URL
   },
 };
 
@@ -21,10 +22,8 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
- 
+  // Backend URL from environment variable with fallback
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
-  console.log("Backend URL:", backendUrl); 
 
   const fetchTrendingVideos = async () => {
     setLoading(true);
@@ -53,25 +52,31 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white text-black flex flex-col">
       <Header />
-      <main className="flex-grow container mx-auto px-4 py-8 max-w-5xl">
-        <Settings
-          region={region}
-          setRegion={setRegion}
-          maxResults={maxResults}
-          setMaxResults={setMaxResults}
-          category={category}
-          setCategory={setCategory}
-          videoDefinition={videoDefinition}
-          setVideoDefinition={setVideoDefinition}
-        />
-        <button
-          onClick={fetchTrendingVideos}
-          className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition-colors duration-300 mb-8 font-semibold text-lg"
-        >
-          Fetch Trending Videos
-        </button>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <TrendingVideos videos={videos} loading={loading} />
+      <main className="flex-grow px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-1">
+            <Settings
+              region={region}
+              setRegion={setRegion}
+              maxResults={maxResults}
+              setMaxResults={setMaxResults}
+              category={category}
+              setCategory={setCategory}
+              videoDefinition={videoDefinition}
+              setVideoDefinition={setVideoDefinition}
+            />
+            <button
+              onClick={fetchTrendingVideos}
+              className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition-colors duration-300 mb-8 font-semibold text-lg"
+            >
+              Fetch Trending Videos
+            </button>
+            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+          </div>
+          <div className="lg:col-span-2">
+            <TrendingVideos videos={videos} loading={loading} />
+          </div>
+        </div>
       </main>
       <Footer />
       <Analytics />
