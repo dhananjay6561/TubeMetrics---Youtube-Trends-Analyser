@@ -1,148 +1,277 @@
-# YouTube Trending Analyzer
+# **YouTube Trending Analyzer**
 
-## Project Overview
-The **YouTube Trending Analyzer** is a web-based application that allows users to analyze trending YouTube videos based on region, category, and other attributes. It fetches trending videos using the YouTube Data API and provides an interactive user interface for analysis. This project consists of a backend implemented in Python (Flask) and a frontend developed using React with Tailwind CSS.
+A web application that fetches and displays trending YouTube videos based on user-defined settings. The app leverages the **YouTube Data API**, with a Flask-based backend and a React-based frontend, to provide real-time trending insights.
 
----
+## **Architecture Overview**
 
-## Backend Overview
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Backend Section -->
+  <rect x="50" y="50" width="200" height="300" fill="#e2e8f0" rx="10"/>
+  <text x="150" y="80" text-anchor="middle" font-size="18" font-weight="bold">Backend (Flask)</text>
+  <rect x="70" y="100" width="160" height="60" fill="#93c5fd" rx="5"/>
+  <text x="150" y="135" text-anchor="middle">YouTube Data API</text>
+  <rect x="70" y="180" width="160" height="60" fill="#93c5fd" rx="5"/>
+  <text x="150" y="215" text-anchor="middle">API Endpoints</text>
+  <rect x="70" y="260" width="160" height="60" fill="#93c5fd" rx="5"/>
+  <text x="150" y="295" text-anchor="middle">Data Processing</text>
 
-The backend of the application is built using Flask and handles the following responsibilities:
+  <!-- Frontend Section -->
+  <rect x="550" y="50" width="200" height="300" fill="#e2e8f0" rx="10"/>
+  <text x="650" y="80" text-anchor="middle" font-size="18" font-weight="bold">Frontend (React)</text>
+  <rect x="570" y="100" width="160" height="60" fill="#93c5fd" rx="5"/>
+  <text x="650" y="135" text-anchor="middle">Settings Component</text>
+  <rect x="570" y="180" width="160" height="60" fill="#93c5fd" rx="5"/>
+  <text x="650" y="215" text-anchor="middle">Video Display</text>
+  <rect x="570" y="260" width="160" height="60" fill="#93c5fd" rx="5"/>
+  <text x="650" y="295" text-anchor="middle">Filters</text>
 
-1. **Endpoints**:
-   - `/api/trending`: Fetches trending videos based on the region and other parameters.
-   - `/api/categories`: Fetches a mapping of YouTube video categories.
+  <!-- Connecting Arrows -->
+  <path d="M 250 130 L 550 130" stroke="#475569" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 550 220 L 250 220" stroke="#475569" stroke-width="2" marker-end="url(#arrowhead)"/>
 
-2. **Technologies Used**:
-   - `Flask`: Serves the API endpoints.
-   - `Google API Client`: Communicates with the YouTube Data API.
-   - `dotenv`: Manages sensitive environment variables like API keys.
-   - `Flask-CORS`: Enables cross-origin requests for seamless frontend-backend integration.
-
-3. **Core Files**:
-   - `app.py`: Contains the Flask app with defined routes and request handling.
-   - `model.py`: Implements the functions to interact with the YouTube Data API and process data.
-
-4. **Key Features**:
-   - Fetches trending videos based on region (`regionCode`) and maximum results (`maxResults`).
-   - Retrieves and processes video category mappings.
-
----
-
-## Frontend Overview
-
-The frontend is built using React with Vite as the build tool and Tailwind CSS for styling. It provides a user-friendly interface for interacting with the API and visualizing trending videos.
-
-1. **Features**:
-   - Input fields for API Key, region, and video preferences (e.g., category, definition).
-   - A button to fetch trending videos and display them dynamically.
-   - Video cards showing title, channel name, view count, and thumbnails.
-
-2. **Technologies Used**:
-   - `React`: Component-based UI development.
-   - `Vite`: Fast build tool for React.
-   - `Tailwind CSS`: Simplified and responsive styling.
-   - `Axios`: API calls to the backend.
-
-3. **Core Components**:
-   - `Header`: Displays the title and logo.
-   - `APIKeyInput`: Input field for entering and saving the YouTube Data API key.
-   - `Settings`: Allows users to select video preferences such as region and category.
-   - `TrendingVideos`: Displays a grid of trending videos fetched from the API.
-   - `Footer`: Contains additional information or links.
+  <!-- Arrow Marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569"/>
+    </marker>
+  </defs>
+</svg>
 
 ---
 
-## How to Use the Application
+## **Project Overview**
+This project is designed to fetch trending YouTube videos, categorize them, and display them in a user-friendly interface. It features:
+1. A **backend** powered by Flask, hosted on Render.
+2. A **frontend** built using React, styled with Tailwind CSS, and hosted on Vercel.
+3. Integration with **Google Cloud's YouTube Data API** for efficient data retrieval.
 
-Follow these steps to set up and run the project:
+---
+
+## **Backend**
+The backend is built with Flask and deployed on **Render**. It handles the following functionalities:
+
+### **Endpoints**:
+1. `/api/trending`:
+   - Fetches trending YouTube videos for a specified region, category, and other filters.
+2. `/api/categories`:
+   - Fetches video categories to help users filter videos meaningfully.
+
+### **Features**:
+- **Dynamic API Integration**:
+  - The backend communicates with Google Cloud’s **YouTube Data API** to retrieve real-time trending video data.
+- **Efficient Use of Google Cloud**:
+  - Parameters like region, category, and video definition are passed dynamically to minimize API calls and fetch only the required data.
+- **Environment Variable Integration**:
+  - The API key is securely stored in a `.env` file, ensuring security and ease of configuration.
+- **CORS Enabled**:
+  - Allows cross-origin requests, enabling seamless communication between the frontend and backend.
+
+---
+
+## **Frontend**
+The frontend is built with React, styled with Tailwind CSS, and hosted on **Vercel**.
+
+### **Key Features**:
+1. **Dynamic Filters**:
+   - Users can customize the results by selecting region, category, video definition (HD/SD), and maximum results.
+2. **Responsive UI**:
+   - Designed to work seamlessly across devices with modern styling.
+3. **Real-Time Updates**:
+   - Fetches and displays trending videos dynamically.
+
+### **Components**:
+1. **Settings**:
+   - Allows users to adjust filters like region, category, and video quality.
+2. **TrendingVideos**:
+   - Displays fetched videos with thumbnails, titles, and view counts.
+
+---
+
+## **Jupyter Notebook (`model.ipynb`)**
+The **Jupyter Notebook** serves as a playground for exploring and debugging functionalities. It contains the following:
+
+### **1. Fetching YouTube Trending Videos**
+- **Functionality**:
+  - A function (`get_trending_videos`) interacts with the YouTube Data API to fetch trending video details like titles, views, thumbnails, and channel names.
+  - Parameters such as `regionCode`, `maxResults`, and `videoDefinition` allow dynamic customization.
+
+---
+
+### **2. Mapping Video Categories**
+- **Functionality**:
+  - Another function (`get_category_mapping`) fetches YouTube video categories for a specific region.
+  - Categories (e.g., Music, Gaming, Education) are mapped to their respective IDs.
+
+---
+
+### **3. Data Analysis**
+- **Functionality**:
+  - Uses **Pandas** to process and clean the fetched data.
+  - Saves the trending video data into a CSV file (`trending_videos.csv`).
+
+---
+
+### **4. Debugging & Visualization**
+- **Functionality**:
+  - Basic data visualization using libraries like Matplotlib or Seaborn (optional).
+
+---
+
+## **How This Works**
+1. **Efficient API Usage**:
+   - The app dynamically filters and fetches data based on user preferences, reducing unnecessary API calls and saving quota.
+2. **Secure Environment Variables**:
+   - The API key is kept secure using `.env` and not hardcoded into the codebase.
+
+---
+
+## **Tech Stack**
+- **Backend**: Flask, Python
+- **Frontend**: React, Tailwind CSS
+- **API**: YouTube Data API v3
+- **Deployment**: 
+  - Backend: Render
+  - Frontend: Vercel
+
+## **Getting Started**
 
 ### Prerequisites
-- Python 3.x
-- Node.js and npm/yarn
-- Git
+- Python 3.8+
+- Node.js 14+
+- YouTube Data API key
 
-### Setup
-1. Clone the repository:
-   ```bash
-   git clone <https://github.com/dhananjay6561/TubeMetrics---Youtube-Trends-Analyserl>
-   cd <TubeMetrics---Youtube-Trends-Analyser
->
-   ```
+### Installation
 
-2. **Backend Setup**:
-   ```bash
-   cd backend
-   python -m venv venv
-   source venv/bin/activate    # For Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   python app.py
-   ```
-   The backend will start at `http://127.0.0.1:5000/`.
-
-3. **Frontend Setup**:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-   The frontend will start at `http://127.0.0.1:5173/`.
-
-### API Key
-For now, you may use the following API Key:
-```
-AIzaSyBsG-i6LFGWtTw2JWoOLoWPpYvtmQrGPHE
-```
-Place this key in the `.env` file in the `backend` folder as:
-```
-API_KEY=AIzaSyBsG-i6LFGWtTw2JWoOLoWPpYvtmQrGPHE
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/youtube-trending-analyzer.git
+cd youtube-trending-analyzer
 ```
 
-### Usage
-- Enter the API Key in the frontend or backend as instructed.
-- Select the region and preferences.
-- Fetch and analyze trending videos!
+2. **Backend Setup**
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+pip install -r requirements.txt
+
+# Configure environment variables
+cp .env.example .env
+# Add your YouTube API key to .env
+```
+
+3. **Frontend Setup**
+```bash
+cd frontend
+npm install
+```
+
+## **Running the Application**
+
+1. **Start the Backend**
+```bash
+# From the backend directory
+flask run --debug
+```
+
+2. **Start the Frontend**
+```bash
+# From the frontend directory
+npm run dev
+```
+
+3. Visit `http://localhost:3000` in your browser
+
+## **How to Contribute**
+
+We welcome contributions! Here's how you can help:
+
+### Setting Up Development Environment
+
+1. **Fork and Clone**
+```bash
+git clone https://github.com/yourusername/youtube-trending-analyzer.git
+cd youtube-trending-analyzer
+git checkout -b feature/your-feature-name
+```
+
+2. **Install Dependencies**
+```bash
+# Backend
+cd backend
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Frontend
+cd ../frontend
+npm install
+```
+
+### Making Changes
+
+1. **Code Style**
+- Follow PEP 8 for Python code
+- Use ESLint and Prettier for JavaScript/React
+- Write meaningful commit messages (Conventional Commits)
+- Add appropriate comments and documentation
+
+2. **Testing**
+```bash
+# Run backend tests
+python -m pytest
+
+# Run frontend tests
+npm test
+```
+
+3. **Submitting Changes**
+```bash
+git add .
+git commit -m "feat: Add your feature description"
+git push origin feature/your-feature-name
+```
+
+4. Create a Pull Request:
+   - Go to GitHub
+   - Click "New Pull Request"
+   - Select your feature branch
+   - Describe your changes
+   - Link related issues
+
+### Guidelines
+- Write clean, documented code
+- Add tests for new features
+- Update documentation
+- Follow existing code style
+- Create issues for major changes
+- Review existing issues and PRs
+
+
+## **Future Improvements**
+1. **Enhanced Visualization**:
+   - Add interactive charts to display video trends and analytics.
+2. **Pagination**:
+   - Handle large datasets efficiently.
+3. **Authentication**:
+   - Add user accounts to save preferences and history.
+4. **Dark Mode**:
+   - Provide better accessibility and aesthetics.
+
+   ## **License**
+MIT License - see LICENSE.md
+
+## **Contact**
+- GitHub Issues: [Project Issues](https://github.com/yourusername/youtube-trending-analyzer/issues)
+- Email: your.email@example.com
+
+## **Acknowledgments**
+- YouTube Data API
+- Contributors and maintainers
+- Open source community
+
 
 ---
 
-## How to Contribute
-We welcome contributions to the project! Here’s how you can contribute:
-
-1. **Fork the Repository**:
-   - Click the `Fork` button at the top of the repository.
-
-2. **Create a New Branch**:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-3. **Make Your Changes**:
-   - Update the backend or frontend code as needed.
-
-4. **Test Your Changes**:
-   - Ensure your changes work seamlessly in both the backend and frontend.
-
-5. **Submit a Pull Request**:
-   - Push your changes to your forked repository:
-     ```bash
-     git push origin feature/your-feature-name
-     ```
-   - Create a pull request from your repository to the main project.
-
----
-
-## Future Scopes of Improvement
-- **Authentication**: Implement OAuth2.0 for secure API usage.
-- **Advanced Filtering**: Add more filtering options like duration, likes, and comments.
-- **Data Visualization**: Include graphs and charts for a better analytical experience.
-- **Multilingual Support**: Allow users to select a language for trending videos.
-- **Enhanced UI**: Improve the frontend with more modern design elements.
-- **Database Integration**: Store video data for historical analysis.
-
----
-
-## Outro
-This project is a powerful tool for analyzing YouTube's trending content. Whether you’re a developer, analyst, or just curious about YouTube trends, this app serves as a great starting point. Contributions and feedback are always welcome to make this tool even better.
-
-**Happy Coding!** 🚀
-
+## **Outro**
+This project demonstrates the integration of React, Flask, and the YouTube Data API to create a modern, data-driven web application. Contributions and feedback are welcome!
