@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Header from "./components/Header";
-import APIKeyInput from "./components/APIKeyInput";
 import Settings from "./components/Settings";
 import TrendingVideos from "./components/TrendingVideos";
 import Footer from "./components/Footer";
@@ -15,7 +14,6 @@ const process = {
 };
 
 export default function App() {
-  const [apiKey, setApiKey] = useState("");
   const [region, setRegion] = useState("US");
   const [maxResults, setMaxResults] = useState(50);
   const [category, setCategory] = useState("");
@@ -28,13 +26,6 @@ export default function App() {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   console.log("Backend URL:", backendUrl); // Debugging line
-
-  useEffect(() => {
-    const storedApiKey = localStorage.getItem("youtubeApiKey");
-    if (storedApiKey) {
-      setApiKey(storedApiKey);
-    }
-  }, []);
 
   const fetchTrendingVideos = async () => {
     setLoading(true);
@@ -64,7 +55,6 @@ export default function App() {
     <div className="min-h-screen bg-white text-black flex flex-col">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8 max-w-5xl">
-        <APIKeyInput apiKey={apiKey} setApiKey={setApiKey} />
         <Settings
           region={region}
           setRegion={setRegion}
