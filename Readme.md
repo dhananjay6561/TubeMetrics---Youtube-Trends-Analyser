@@ -4,38 +4,7 @@ A web application that fetches and displays trending YouTube videos based on use
 
 ## **Architecture Overview**
 
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-  <!-- Backend Section -->
-  <rect x="50" y="50" width="200" height="300" fill="#e2e8f0" rx="10"/>
-  <text x="150" y="80" text-anchor="middle" font-size="18" font-weight="bold">Backend (Flask)</text>
-  <rect x="70" y="100" width="160" height="60" fill="#93c5fd" rx="5"/>
-  <text x="150" y="135" text-anchor="middle">YouTube Data API</text>
-  <rect x="70" y="180" width="160" height="60" fill="#93c5fd" rx="5"/>
-  <text x="150" y="215" text-anchor="middle">API Endpoints</text>
-  <rect x="70" y="260" width="160" height="60" fill="#93c5fd" rx="5"/>
-  <text x="150" y="295" text-anchor="middle">Data Processing</text>
-
-  <!-- Frontend Section -->
-  <rect x="550" y="50" width="200" height="300" fill="#e2e8f0" rx="10"/>
-  <text x="650" y="80" text-anchor="middle" font-size="18" font-weight="bold">Frontend (React)</text>
-  <rect x="570" y="100" width="160" height="60" fill="#93c5fd" rx="5"/>
-  <text x="650" y="135" text-anchor="middle">Settings Component</text>
-  <rect x="570" y="180" width="160" height="60" fill="#93c5fd" rx="5"/>
-  <text x="650" y="215" text-anchor="middle">Video Display</text>
-  <rect x="570" y="260" width="160" height="60" fill="#93c5fd" rx="5"/>
-  <text x="650" y="295" text-anchor="middle">Filters</text>
-
-  <!-- Connecting Arrows -->
-  <path d="M 250 130 L 550 130" stroke="#475569" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <path d="M 550 220 L 250 220" stroke="#475569" stroke-width="2" marker-end="url(#arrowhead)"/>
-
-  <!-- Arrow Marker -->
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#475569"/>
-    </marker>
-  </defs>
-</svg>
+![Architecture](Images/image2.png)
 
 ---
 
@@ -44,6 +13,8 @@ This project is designed to fetch trending YouTube videos, categorize them, and 
 1. A **backend** powered by Flask, hosted on Render.
 2. A **frontend** built using React, styled with Tailwind CSS, and hosted on Vercel.
 3. Integration with **Google Cloud's YouTube Data API** for efficient data retrieval.
+
+![Project](Images/image.png)
 
 ---
 
@@ -144,8 +115,8 @@ The **Jupyter Notebook** serves as a playground for exploring and debugging func
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/youtube-trending-analyzer.git
-cd youtube-trending-analyzer
+git clone https://github.com/dhananjay6561/TubeMetrics---Youtube-Trends-Analyser
+cd TubeMetrics---Youtube-Trends-Analyser
 ```
 
 2. **Backend Setup**
@@ -190,8 +161,8 @@ We welcome contributions! Here's how you can help:
 
 1. **Fork and Clone**
 ```bash
-git clone https://github.com/yourusername/youtube-trending-analyzer.git
-cd youtube-trending-analyzer
+git clone https://github.com/dhananjay6561/TubeMetrics---Youtube-Trends-Analyser
+cd TubeMetrics---Youtube-Trends-Analyser
 git checkout -b feature/your-feature-name
 ```
 
@@ -262,7 +233,7 @@ git push origin feature/your-feature-name
 MIT License - see LICENSE.md
 
 ## **Contact**
-- GitHub Issues: [Project Issues](https://github.com/yourusername/youtube-trending-analyzer/issues)
+- GitHub Issues: [Project Issues](https://github.com/dhananjay6561/TubeMetrics---Youtube-Trends-Analyser/issues)
 - Email: your.email@example.com
 
 ## **Acknowledgments**
