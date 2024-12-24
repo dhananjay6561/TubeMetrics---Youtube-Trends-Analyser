@@ -5,6 +5,7 @@ import APIKeyInput from "./components/APIKeyInput";
 import Settings from "./components/Settings";
 import TrendingVideos from "./components/TrendingVideos";
 import Footer from "./components/Footer";
+import { Analytics } from "@vercel/analytics/react"
 
 export default function App() {
   const [apiKey, setApiKey] = useState("");
