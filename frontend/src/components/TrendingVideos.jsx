@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from "framer-motion";
 
 export default function TrendingVideos({ videos, loading }) {
@@ -5,7 +6,7 @@ export default function TrendingVideos({ videos, loading }) {
     return (
       <div className="flex justify-center items-center h-64">
         <motion.div
-          className="w-16 h-16 border-t-4 border-black border-solid rounded-full"
+          className="w-16 h-16 border-t-4 border-purple-500 border-solid rounded-full"
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         />
@@ -15,34 +16,52 @@ export default function TrendingVideos({ videos, loading }) {
 
   if (videos.length === 0) {
     return (
-      <p className="text-center text-gray-500 text-lg">
+      <motion.p 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center text-gray-500 text-xl p-12"
+      >
         No videos to display. Click "Fetch Trending Videos" to get started!
-      </p>
+      </motion.p>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <motion.div 
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: { staggerChildren: 0.1 }
+        }
+      }}
+    >
       {videos.map((video) => (
         <motion.div
           key={video.id}
-          className="bg-white shadow-lg rounded-lg overflow-hidden"
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.98 }}
+          className="bg-white rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-2xl"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0 }
+          }}
+          whileHover={{ y: -8 }}
         >
-          <div className="relative">
+          <div className="relative group">
             <img
               src={video.thumbnail}
               alt={video.title}
               className="w-full h-48 object-cover"
             />
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-              <svg
-                className="w-12 h-12 text-white"
+            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <motion.svg
+                className="w-16 h-16 text-white"
+                whileHover={{ scale: 1.1 }}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   strokeLinecap="round"
@@ -56,20 +75,20 @@ export default function TrendingVideos({ videos, loading }) {
                   strokeWidth={2}
                   d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
-              </svg>
+              </motion.svg>
             </div>
           </div>
-          <div className="p-4">
-            <h3 className="font-semibold text-lg mb-1 line-clamp-2">
+          <div className="p-6">
+            <h3 className="font-bold text-lg mb-2 line-clamp-2 text-gray-800">
               {video.title}
             </h3>
-            <p className="text-gray-600 text-sm mb-1">{video.channelName}</p>
-            <p className="text-gray-500 text-sm">
-              {video.viewCount || "N/A"} Views
+            <p className="text-purple-600 font-medium mb-2">{video.channelName}</p>
+            <p className="text-gray-600 text-sm">
+              {video.viewCount?.toLocaleString() || "N/A"} Views
             </p>
           </div>
         </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }
