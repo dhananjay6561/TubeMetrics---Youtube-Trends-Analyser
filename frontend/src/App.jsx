@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./components/Header";
 import Settings from "./components/Settings";
 import TrendingVideos from "./components/TrendingVideos";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react";
-
 
 export default function App() {
   const [region, setRegion] = useState("US");
@@ -15,9 +14,28 @@ export default function App() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [backendUrl, setBackendUrl] = useState("");
 
- 
-  const backendUrl = "http://tubemetricsbackend.vercel.app/";
+  useEffect(() => {
+    async function resolveBackendUrl() {
+      const primaryUrl = "http://tubemetricsbackend.vercel.app/";
+      const fallbackUrl = "http://127.0.0.1:5000";
+
+      try {
+        const response = await fetch(primaryUrl, { method: "HEAD" });
+        if (response.ok) {
+          setBackendUrl(primaryUrl);
+        } else {
+          throw new Error("Primary URL not accessible");
+        }
+      } catch (error) {
+        console.warn("Falling back to localhost:", error.message);
+        setBackendUrl(fallbackUrl);
+      }
+    }
+
+    resolveBackendUrl();
+  }, []);
 
   const fetchTrendingVideos = async () => {
     setLoading(true);
@@ -36,7 +54,7 @@ export default function App() {
     } catch (err) {
       console.error("Error fetching trending videos:", err);
       setError(
-        "Failed to fetch trending videos. It's likely that the backend server is down. Please try again later."
+        "Failed to fetch trending videos. Please ensure the backend server is running and try again."
       );
     } finally {
       setLoading(false);
