@@ -15,8 +15,7 @@ export default function App() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [backendUrl, setBackendUrl] = useState(null);
-
+  const [backendUrl, setBackendUrl] = useState("https://tube-metrics-youtube-tr-git-46989e-dhananjay-aggarwals-projects.vercel.app");
 
   useEffect(() => {
     localStorage.setItem("region", region);
@@ -24,42 +23,6 @@ export default function App() {
     localStorage.setItem("category", category);
     localStorage.setItem("videoDefinition", videoDefinition);
   }, [region, maxResults, category, videoDefinition]);
-
-
-  const resolveBackendUrl = useCallback(async (retryCount = 0) => {
-    const primaryUrl = "https://tube-metrics-youtube-tr-git-46989e-dhananjay-aggarwals-projects.vercel.app";
-    const fallbackUrl = "http://127.0.0.1:5000";
-    const maxRetries = 3;
-    const retryDelay = 1000; // 1 second
-
-    try {
-      const response = await fetch(`${primaryUrl}/health`, { 
-        method: "HEAD",
-        timeout: 5000
-      });
-      
-      if (response.ok) {
-        setBackendUrl(primaryUrl);
-        setError("");
-      } else {
-        throw new Error("Primary URL not accessible");
-      }
-    } catch (error) {
-      console.warn(`Backend resolution attempt ${retryCount + 1} failed:`, error.message);
-      
-      if (retryCount < maxRetries) {
-        setTimeout(() => resolveBackendUrl(retryCount + 1), retryDelay);
-      } else {
-        console.warn("Falling back to localhost");
-        setBackendUrl(fallbackUrl);
-        setError("Using fallback server. Some features may be limited.");
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    resolveBackendUrl();
-  }, [resolveBackendUrl]);
 
   const fetchTrendingVideos = async () => {
     if (!backendUrl) {
@@ -69,11 +32,10 @@ export default function App() {
 
     setLoading(true);
     setError("");
+    console.log("Fetching from:", backendUrl);
+    console.log("Request params:", { region, maxResults, category, videoDefinition });
 
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-
       const response = await axios.get(`${backendUrl}/api/trending`, {
         params: {
           region,
@@ -81,10 +43,14 @@ export default function App() {
           category,
           videoDefinition,
         },
-        signal: controller.signal
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        timeout: 30000
       });
 
-      clearTimeout(timeout);
+      console.log("API Response:", response);
       
       if (response.data && Array.isArray(response.data)) {
         setVideos(response.data);
@@ -93,14 +59,19 @@ export default function App() {
         throw new Error("Invalid response format");
       }
     } catch (err) {
-      console.error("Error fetching trending videos:", err);
-      if (err.name === "AbortError") {
+      console.error("Error details:", err);
+      
+      if (err.code === "ECONNABORTED") {
         setError("Request timed out. Please try again.");
       } else if (err.response?.status === 429) {
         setError("Too many requests. Please wait a moment and try again.");
+      } else if (err.response?.status === 403) {
+        setError("Access denied. Please check your API configuration.");
+      } else if (err.message.includes("Network Error")) {
+        setError("Network error. Please check your internet connection.");
       } else {
         setError(
-          "Failed to fetch trending videos. Please check your connection and try again."
+          `Failed to fetch trending videos: ${err.message}`
         );
       }
     } finally {
@@ -127,7 +98,7 @@ export default function App() {
             />
             <button
               onClick={fetchTrendingVideos}
-              disabled={loading || !backendUrl}
+              disabled={loading}
               className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition-colors duration-300 mb-8 font-semibold text-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {loading ? (
