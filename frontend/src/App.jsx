@@ -18,7 +18,7 @@ export default function App() {
 
   useEffect(() => {
     async function resolveBackendUrl() {
-      const primaryUrl = "http://tubemetricsbackend.vercel.app/";
+      const primaryUrl = "tube-metrics-youtube-trends-analyser-pdx4.vercel.app";
       const fallbackUrl = "http://127.0.0.1:5000";
 
       try {
