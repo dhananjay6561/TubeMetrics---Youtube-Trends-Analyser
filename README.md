@@ -14,6 +14,22 @@ This project is designed to fetch trending YouTube videos, categorize them, and 
 
 ![Project](Images/image.png)
 
+## Project Features
+
+This project includes several key technical features:
+
+1. Fully Dockerized Application:
+   - Containerized frontend and backend services
+   - Docker Compose for easy development and deployment
+   - Optimized Docker configurations for both services
+   - Simplified environment setup across different platforms
+
+2. Modern Architecture:
+   - Microservices-based design
+   - RESTful API implementation
+   - Real-time data processing
+   - Responsive web interface
+
 ## Backend
 The backend is built with Flask and deployed on Render. It handles the following functionalities:
 
@@ -80,31 +96,85 @@ The Jupyter Notebook serves as a playground for exploring and debugging function
 
 ## Docker
 
-The backend can also be containerized using Docker to ensure consistency across development and production environments.
+The application is fully dockerized with both frontend and backend services containerized for consistent development and deployment environments.
+
+### Frontend Dockerfile
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+
+RUN npm install
+
+RUN npm install -g serve
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["serve", "-s", "dist", "-l", "3000"]
+```
+
+### Frontend .dockerignore
+```
+node_modules
+```
+
+### Docker Compose Configuration
+```yaml
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - backend/.env
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+```
 
 ### Steps to Use Docker:
 
-1. Ensure Docker is Installed
-   - Install Docker from the [official Docker website](https://www.docker.com/get-started).
+1. Ensure Docker and Docker Compose are Installed
+   - Install Docker from the [official Docker website](https://www.docker.com/get-started)
+   - Docker Compose comes with Docker Desktop on Windows and macOS
 
-2. Build the Docker Image
+2. Run the Entire Application with Docker Compose
    ```bash
-   cd backend
-   docker build -t youtube-trending-analyzer-backend .
+   # From the root directory
+   docker-compose up --build
    ```
 
-3. Run the Docker Container
+3. Access the Application
+   - Frontend: `http://localhost:3000`
+   - Backend: `http://localhost:5000`
+
+4. Stop the Application
    ```bash
-   docker run -p 5000:5000 --env-file .env youtube-trending-analyzer-backend
+   docker-compose down
    ```
 
-4. Access the Backend
-   - Open `http://localhost:5000` to access the backend API.
+5. Run Individual Services (Optional)
+   ```bash
+   # Run only backend
+   docker-compose up backend
 
-5. Frontend with Docker (Optional)
-   - Similarly, the frontend can be containerized if needed. Add a Dockerfile to the `frontend` directory and follow the same steps.
+   # Run only frontend
+   docker-compose up frontend
+   ```
 
-> Note: Ensure that your `.env` file is correctly set up before running the Docker container.
+> Note: Ensure that your `.env` file is correctly set up in the backend directory before running Docker Compose.
 
 ## Tech Stack
 - Backend: Flask, Python
