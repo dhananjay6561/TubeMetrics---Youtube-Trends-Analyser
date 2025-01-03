@@ -1,3 +1,6 @@
+Here’s the updated README in code form:
+
+```markdown
 # **YouTube Trending Analyzer**
 
 A web application that fetches and displays trending YouTube videos based on user-defined settings. The app leverages the **YouTube Data API**, with a Flask-based backend and a React-based frontend, to provide real-time trending insights.
@@ -96,6 +99,36 @@ The **Jupyter Notebook** serves as a playground for exploring and debugging func
 
 ---
 
+## **Docker**
+
+The backend can also be containerized using Docker to ensure consistency across development and production environments.
+
+### **Steps to Use Docker**:
+
+1. **Ensure Docker is Installed**
+   - Install Docker from the [official Docker website](https://www.docker.com/get-started).
+
+2. **Build the Docker Image**
+   ```bash
+   cd backend
+   docker build -t youtube-trending-analyzer-backend .
+   ```
+
+3. **Run the Docker Container**
+   ```bash
+   docker run -p 5000:5000 --env-file .env youtube-trending-analyzer-backend
+   ```
+
+4. **Access the Backend**
+   - Open `http://localhost:5000` to access the backend API.
+
+5. **Frontend with Docker (Optional)**
+   - Similarly, the frontend can be containerized if needed. Add a Dockerfile to the `frontend` directory and follow the same steps.
+
+> **Note**: Ensure that your `.env` file is correctly set up before running the Docker container.
+
+---
+
 ## **Tech Stack**
 - **Backend**: Flask, Python
 - **Frontend**: React, Tailwind CSS
@@ -142,7 +175,7 @@ npm install
 1. **Start the Backend**
 ```bash
 # From the backend directory
-flask run --debug
+python app.py
 ```
 
 2. **Start the Frontend**
@@ -218,6 +251,7 @@ git push origin feature/your-feature-name
 - Create issues for major changes
 - Review existing issues and PRs
 
+---
 
 ## **Future Improvements**
 1. **Enhanced Visualization**:
@@ -229,8 +263,7 @@ git push origin feature/your-feature-name
 4. **Dark Mode**:
    - Provide better accessibility and aesthetics.
 
-   ## **License**
-MIT License - see LICENSE.md
+---
 
 ## **Contact**
 - GitHub Issues: [Project Issues](https://github.com/dhananjay6561/TubeMetrics---Youtube-Trends-Analyser/issues)
@@ -241,8 +274,8 @@ MIT License - see LICENSE.md
 - Contributors and maintainers
 - Open source community
 
-
 ---
 
 ## **Outro**
 This project demonstrates the integration of React, Flask, and the YouTube Data API to create a modern, data-driven web application. Contributions and feedback are welcome!
+```
