@@ -2,20 +2,22 @@ from googleapiclient.discovery import build
 from dotenv import load_dotenv
 import os
 from collections import Counter
+import pandas as pd
 
 # Load environment variables
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
 
-def get_trending_videos(region_code="US", max_results=50, category_id=None):
+def get_trending_videos(region_code="US", max_results=50, category_id=None, date_range=None):
     """
-    Fetch trending videos from the YouTube Data API with optional category filtering.
+    Fetch trending videos from the YouTube Data API with optional category and date range filtering.
 
     Args:
         region_code (str): Region code (e.g., "US").
         max_results (int): Maximum number of results.
         category_id (str): (Optional) Category ID to filter videos.
+        date_range (tuple): Optional date range tuple (start_date, end_date) for filtering.
 
     Returns:
         list: A list of dictionaries containing video details.
@@ -35,6 +37,12 @@ def get_trending_videos(region_code="US", max_results=50, category_id=None):
             # Filter by category if category_id is provided
             if category_id and item["snippet"]["categoryId"] != category_id:
                 continue
+            
+            # Filter by date range if provided
+            if date_range:
+                published_at = item["snippet"]["publishedAt"]
+                if not is_within_date_range(published_at, date_range):
+                    continue
 
             videos.append({
                 "id": item["id"],
@@ -42,12 +50,29 @@ def get_trending_videos(region_code="US", max_results=50, category_id=None):
                 "channelName": item["snippet"]["channelTitle"],
                 "viewCount": item["statistics"].get("viewCount", "0"),
                 "thumbnail": item["snippet"]["thumbnails"]["high"]["url"],
-                "categoryId": item["snippet"]["categoryId"]
+                "categoryId": item["snippet"]["categoryId"],
+                "publishedAt": item["snippet"]["publishedAt"]
             })
 
         return videos
     except Exception as e:
         raise Exception(f"Failed to fetch trending videos: {str(e)}")
+
+def is_within_date_range(published_at, date_range):
+    """
+    Check if the video's published date is within the specified date range.
+
+    Args:
+        published_at (str): The published date in ISO 8601 format.
+        date_range (tuple): Start and end date in ISO 8601 format (start_date, end_date).
+
+    Returns:
+        bool: True if the date is within the range, False otherwise.
+    """
+    from datetime import datetime
+    start_date, end_date = date_range
+    published_at = datetime.fromisoformat(published_at[:-1])  # Remove the "Z" at the end for datetime parsing
+    return start_date <= published_at <= end_date
 
 def get_category_mapping():
     """
@@ -112,3 +137,39 @@ def search_videos(region_code="US", query=None, max_results=50):
         videos = [video for video in videos if query in video["title"].lower() or query in video["channelName"].lower()]
 
     return videos
+
+def preprocess_videos(videos):
+    """
+    Process and prepare video data for visualizations.
+
+    Args:
+        videos (list): List of video dictionaries.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing processed video data.
+    """
+    df = pd.DataFrame(videos)
+    
+    # Convert viewCount and publishedAt to appropriate types
+    df['viewCount'] = pd.to_numeric(df['viewCount'], errors='coerce')
+    df['publishedAt'] = pd.to_datetime(df['publishedAt'], errors='coerce')
+
+    # Filter out rows with missing data
+    df = df.dropna(subset=['viewCount'])
+
+    return df
+
+def get_category_videos(region_code="US", category_id=None, max_results=50):
+    """
+    Fetch trending videos filtered by category.
+
+    Args:
+        region_code (str): Region code.
+        category_id (str): Category ID.
+        max_results (int): Maximum number of results.
+
+    Returns:
+        pd.DataFrame: A DataFrame of videos filtered by category.
+    """
+    videos = get_trending_videos(region_code, max_results, category_id)
+    return preprocess_videos(videos)

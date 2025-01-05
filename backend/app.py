@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from model import get_trending_videos, get_category_mapping, get_top_channels, search_videos
 from flask_cors import CORS
+from datetime import datetime
 import os
 
 app = Flask(__name__)
@@ -18,12 +19,14 @@ def home():
 @app.route("/api/trending", methods=["GET"])
 def trending():
     """
-    API endpoint to fetch trending videos with optional category filtering.
+    API endpoint to fetch trending videos with optional category and date range filtering.
 
     Query Parameters:
         region (str): Region code (default is "US").
         maxResults (int): Maximum number of results (default is 50).
         categoryId (str): (Optional) Category ID to filter videos.
+        startDate (str): (Optional) Start date in ISO 8601 format (e.g., '2025-01-01').
+        endDate (str): (Optional) End date in ISO 8601 format (e.g., '2025-01-31').
 
     Returns:
         JSON: A list of trending videos with their details.
@@ -31,6 +34,8 @@ def trending():
     region = request.args.get("region", "US")
     max_results = request.args.get("maxResults", 50)
     category_id = request.args.get("categoryId", None)
+    start_date = request.args.get("startDate", None)
+    end_date = request.args.get("endDate", None)
 
     try:
         max_results = int(max_results)
@@ -39,8 +44,18 @@ def trending():
     except ValueError:
         return jsonify({"error": "maxResults must be an integer"}), 400
 
+    # Convert date strings to datetime objects if provided
+    date_range = None
+    if start_date and end_date:
+        try:
+            start_date = datetime.fromisoformat(start_date)
+            end_date = datetime.fromisoformat(end_date)
+            date_range = (start_date, end_date)
+        except ValueError:
+            return jsonify({"error": "Invalid date format. Please use ISO 8601 format."}), 400
+
     try:
-        videos = get_trending_videos(region_code=region, max_results=max_results, category_id=category_id)
+        videos = get_trending_videos(region_code=region, max_results=max_results, category_id=category_id, date_range=date_range)
         return jsonify(videos)
     except Exception as e:
         return jsonify({"error": "Failed to fetch trending videos", "details": str(e)}), 500
