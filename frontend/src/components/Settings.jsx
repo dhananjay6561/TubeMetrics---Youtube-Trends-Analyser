@@ -60,7 +60,7 @@ export default function Settings({
             max="50"
             value={maxResults}
             onChange={(e) => setMaxResults(Number(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-200"
             whileHover={{ scale: 1.02 }}
           />
         </motion.div>
