@@ -6,8 +6,18 @@ import os
 
 app = Flask(__name__)
 
-# Enable CORS for all routes and origins
-CORS(app, resources={r"/*": {"origins": ["*", "http://localhost:3000", "http://localhost:5173", "https://tube-metrics-youtube-trends-analyser.vercel.app/"]}})
+# Enable CORS for specific origins
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://localhost:5173", "https://tube-metrics-youtube-trends-analyser.vercel.app"]}})
+
+@app.after_request
+def add_cors_headers(response):
+    """
+    Add CORS headers to the response to handle preflight requests.
+    """
+    response.headers.add("Access-Control-Allow-Origin", "https://tube-metrics-youtube-trends-analyser.vercel.app")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return response
 
 @app.route("/")
 def home():
