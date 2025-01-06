@@ -6,8 +6,18 @@ import os
 
 app = Flask(__name__)
 
-# Enable CORS for specific origins
-CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://localhost:5173", "https://tube-metrics-youtube-trends-analyser.vercel.app"]}})
+# Enable CORS for all routes and allow specific origins
+CORS(app, resources={
+    r"/*": {
+        "origins": [
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "https://tube-metrics-youtube-trends-analyser.vercel.app"
+        ],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 @app.after_request
 def add_cors_headers(response):
@@ -17,6 +27,7 @@ def add_cors_headers(response):
     response.headers.add("Access-Control-Allow-Origin", "https://tube-metrics-youtube-trends-analyser.vercel.app")
     response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
     return response
 
 @app.route("/")
@@ -26,7 +37,7 @@ def home():
     """
     return jsonify({"message": "Welcome to the YouTube Trending API!"})
 
-@app.route("/api/trending", methods=["GET"])
+@app.route("/api/trending", methods=["GET", "OPTIONS"])
 def trending():
     """
     API endpoint to fetch trending videos with optional category and date range filtering.
@@ -41,6 +52,10 @@ def trending():
     Returns:
         JSON: A list of trending videos with their details.
     """
+    if request.method == "OPTIONS":
+        # Handle preflight request
+        return jsonify({"message": "Preflight request successful"}), 200
+
     region = request.args.get("region", "US")
     max_results = request.args.get("maxResults", 50)
     category_id = request.args.get("categoryId", None)
@@ -70,7 +85,7 @@ def trending():
     except Exception as e:
         return jsonify({"error": "Failed to fetch trending videos", "details": str(e)}), 500
 
-@app.route("/api/categories", methods=["GET"])
+@app.route("/api/categories", methods=["GET", "OPTIONS"])
 def categories():
     """
     API endpoint to fetch video categories.
@@ -78,13 +93,17 @@ def categories():
     Returns:
         JSON: A mapping of category IDs to category names.
     """
+    if request.method == "OPTIONS":
+        # Handle preflight request
+        return jsonify({"message": "Preflight request successful"}), 200
+
     try:
         categories = get_category_mapping()
         return jsonify(categories)
     except Exception as e:
         return jsonify({"error": "Failed to fetch categories", "details": str(e)}), 500
 
-@app.route("/api/top-channels", methods=["GET"])
+@app.route("/api/top-channels", methods=["GET", "OPTIONS"])
 def top_channels():
     """
     API endpoint to fetch top-performing channels based on total views.
@@ -96,6 +115,10 @@ def top_channels():
     Returns:
         JSON: A list of top channels with their total views.
     """
+    if request.method == "OPTIONS":
+        # Handle preflight request
+        return jsonify({"message": "Preflight request successful"}), 200
+
     region = request.args.get("region", "US")
     max_results = request.args.get("maxResults", 50)
 
@@ -112,7 +135,7 @@ def top_channels():
     except Exception as e:
         return jsonify({"error": "Failed to fetch top channels", "details": str(e)}), 500
 
-@app.route("/api/search", methods=["GET"])
+@app.route("/api/search", methods=["GET", "OPTIONS"])
 def search():
     """
     API endpoint to search for specific keywords in trending videos.
@@ -125,6 +148,10 @@ def search():
     Returns:
         JSON: A list of dictionaries containing matching video details.
     """
+    if request.method == "OPTIONS":
+        # Handle preflight request
+        return jsonify({"message": "Preflight request successful"}), 200
+
     region = request.args.get("region", "US")
     query = request.args.get("query", None)
     max_results = request.args.get("maxResults", 50)
