@@ -6,28 +6,38 @@ import os
 
 app = Flask(__name__)
 
-# Enable CORS for all routes and allow specific origins
+# Define allowed origins
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://tube-metrics-youtube-trends-analyser.vercel.app",
+    "https://tube-metrics-youtube-tr-git-46989e-dhananjay-aggarwals-projects.vercel.app"
+]
+
+# Configure CORS with all necessary headers
 CORS(app, resources={
     r"/*": {
-        "origins": [
-            "http://localhost:3000",
-            "http://localhost:5173",
-            "https://tube-metrics-youtube-trends-analyser.vercel.app"
-        ],
+        "origins": ALLOWED_ORIGINS,
         "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"]
+        "allow_headers": ["Content-Type", "Authorization", "Access-Control-Allow-Origin"],
+        "expose_headers": ["Access-Control-Allow-Origin"],
+        "supports_credentials": True,
+        "max_age": 3600
     }
 })
 
 @app.after_request
-def add_cors_headers(response):
+def after_request(response):
     """
-    Add CORS headers to the response to handle preflight requests.
+    Add CORS headers to every response
     """
-    response.headers.add("Access-Control-Allow-Origin", "https://tube-metrics-youtube-trends-analyser.vercel.app")
-    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    response.headers.add("Access-Control-Allow-Credentials", "true")
+    origin = request.headers.get('Origin')
+    if origin in ALLOWED_ORIGINS:
+        response.headers.add('Access-Control-Allow-Origin', origin)
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,Access-Control-Allow-Origin')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        response.headers.add('Access-Control-Max-Age', '3600')
     return response
 
 @app.route("/")
